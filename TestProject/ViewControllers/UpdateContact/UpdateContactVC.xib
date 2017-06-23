@@ -54,6 +54,9 @@
                                         <constraint firstAttribute="width" constant="40" id="caZ-cR-8yC"/>
                                     </constraints>
                                     <state key="normal" backgroundImage="cameraButton"/>
+                                    <connections>
+                                        <action selector="uploadImageButtonClickedWithSender:" destination="-1" eventType="touchUpInside" id="xfo-iA-Xub"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -152,7 +155,7 @@
                                     <rect key="frame" x="121" y="17" width="249" height="17"/>
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                 </textField>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mobile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8QX-kp-NLg">
                                     <rect key="frame" x="10" y="15" width="101" height="21"/>

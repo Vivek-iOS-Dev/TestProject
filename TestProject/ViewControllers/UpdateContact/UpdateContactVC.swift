@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UpdateContactVC: UIViewController {
+class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopoverControllerDelegate,UINavigationControllerDelegate {
 
     /// Tag view information
 
@@ -21,12 +21,14 @@ class UpdateContactVC: UIViewController {
     @IBOutlet weak var emailField: UITextField!
     var activityIndicator = UIActivityIndicatorView()
     var contacCreationHandler: ((ContactObject) -> Void)?
+    var picker: UIImagePickerController? = UIImagePickerController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         doNavBarDesigns()
         applyYGradientColorForContainerView()
         setUpActivityIndicator()
+        picker?.delegate=self
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,7 +80,46 @@ class UpdateContactVC: UIViewController {
             return
         }
 
+        guard (emailField.text?.characters.count)! > 0 else {
+            showAlertViewController("Email field is mandatory !")
+            return
+        }
+
+        guard checkIfPhoneNumberIsValid() else {
+            showAlertViewController("Invalid Phone number !")
+            return
+        }
+
+        guard checkIfEmailIsValid() else {
+            showAlertViewController("Invalid Email ID !")
+            return
+        }
+
         createContactAPICall()
+    }
+
+    @IBAction func uploadImageButtonClicked(sender: UIButton) {
+        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            self.openCamera()
+        }))
+
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            self.openGallary()
+        }))
+
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    @IBAction func OpenGallery(sender: AnyObject) {
+        openGallary()
+    }
+
+    // Take Photo button click
+    @IBAction func TakePhoto(sender: AnyObject) {
+        openCamera()
     }
 
     // MARK: Other Functionality Methods
@@ -89,8 +130,46 @@ class UpdateContactVC: UIViewController {
             contactInfo["last_name"] = lastNameField.text
             contactInfo["email"] = emailField.text
             contactInfo["phone_number"] = mobileField.text
-            contactInfo["profile_pic"] = ""
         return contactInfo
+    }
+
+    func openGallary() {
+        picker!.allowsEditing = false
+        picker!.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        present(picker!, animated: true, completion: nil)
+    }
+
+
+    func openCamera() {
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
+            picker!.allowsEditing = false
+            picker!.sourceType = UIImagePickerControllerSourceType.camera
+            picker!.cameraCaptureMode = .photo
+            present(picker!, animated: true, completion: nil)
+        }else{
+            let alert = UIAlertController(title: "Camera Not Found", message: "This device has no Camera", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style:.default, handler: nil)
+            alert.addAction(ok)
+            present(alert, animated: true, completion: nil)
+        }
+    }
+
+    // MARK: Validation Methods
+
+    func checkIfEmailIsValid() -> Bool {
+        if emailField.text?.characters.count == 0 {
+            return true
+        }
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: emailField.text)
+    }
+
+    func checkIfPhoneNumberIsValid() -> Bool {
+        let charcterSet  = NSCharacterSet(charactersIn: "+0123456789").inverted
+        let inputString = mobileField.text?.components(separatedBy: charcterSet)
+        let filtered = inputString?.joined(separator: "")
+        return  mobileField.text == filtered && mobileField.text?.characters.count == 10
     }
 
 
@@ -121,6 +200,19 @@ class UpdateContactVC: UIViewController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+
+    // MARK: Picker View Delegate Methods
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            self.profileImageView.image = pickedImage
+        }
+        dismiss(animated: true, completion: nil)
     }
 
 }

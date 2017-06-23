@@ -73,8 +73,16 @@ class APIManager: NSObject {
             }
 
             guard let data = data else {
-                completionHandler(nil, "Invalid Response")
+                completionHandler(nil, "Invalid Request")
                 return
+            }
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("Status Code : \(httpResponse.statusCode)")
+                guard httpResponse.statusCode >= 200 else {
+                    completionHandler(nil, "Invalid Request")
+                    return
+                }
             }
 
             if let json = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
@@ -85,7 +93,7 @@ class APIManager: NSObject {
                 return
             }
 
-            completionHandler(nil, "Invalid Response")
+            completionHandler(nil, "Invalid Request")
             
             }.resume()
     }
@@ -105,8 +113,12 @@ class APIManager: NSObject {
     }
 
     static func prepareRequestForCreateContactDetail(_ contactInfo: [String: Any]) -> URLRequest {
+        print(contactInfo)
         var request = URLRequest(url: URL(string: "\(appBaseURL)contacts.json")!)
-        request.httpBody = NSKeyedArchiver.archivedData(withRootObject: contactInfo)
+        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json",forHTTPHeaderField: "Accept")
+        let jsonData = try? JSONSerialization.data(withJSONObject: contactInfo)
+        request.httpBody = jsonData
         request.httpMethod = "POST"
         return request
     }
