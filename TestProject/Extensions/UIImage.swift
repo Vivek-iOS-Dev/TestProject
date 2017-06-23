@@ -14,6 +14,14 @@ extension UIImage {
         return UIImage(named:"favIcon")!
     }
 
+    class func enableFavIconImage() -> UIImage {
+        return UIImage(named:"favourite")!
+    }
+
+    class func disableFavIconImage() -> UIImage {
+        return UIImage(named:"unfavourite")!
+    }
+
     class func placeHolderImage() -> UIImage {
         return UIImage(named:"placeHolder")!
     }

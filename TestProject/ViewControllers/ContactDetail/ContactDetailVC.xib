@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="contactNameLabel" destination="aw1-bc-J1D" id="DpF-1v-8MF"/>
                 <outlet property="emailLabel" destination="k1L-df-ixg" id="DOJ-0C-GG2"/>
+                <outlet property="favImageView" destination="2VK-dy-MiD" id="Y34-5F-g39"/>
                 <outlet property="mobileLabel" destination="wrW-OU-GgW" id="Goc-k3-IS3"/>
                 <outlet property="profileImageView" destination="bUy-zC-Hdg" id="C0z-Mj-p5U"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -140,7 +141,7 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TMj-6G-6bO">
                                             <rect key="frame" x="281.5" y="0.0" width="93.5" height="70"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="favourite" translatesAutoresizingMaskIntoConstraints="NO" id="2VK-dy-MiD">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unfavourite" translatesAutoresizingMaskIntoConstraints="NO" id="2VK-dy-MiD">
                                                     <rect key="frame" x="26.5" y="5" width="40" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="40" id="OgP-UT-z4l"/>
@@ -298,6 +299,7 @@
                         <constraint firstItem="aw1-bc-J1D" firstAttribute="top" secondItem="bUy-zC-Hdg" secondAttribute="bottom" constant="30" id="1nc-kx-pO9"/>
                         <constraint firstAttribute="trailing" secondItem="ohx-er-sWI" secondAttribute="trailing" id="9Lx-tO-iqe"/>
                         <constraint firstItem="aw1-bc-J1D" firstAttribute="leading" secondItem="a0O-bZ-v04" secondAttribute="leading" constant="19" id="Lh6-xO-feE"/>
+                        <constraint firstAttribute="bottom" secondItem="EkA-TH-GQI" secondAttribute="bottom" constant="40" id="Mav-Ya-44f"/>
                         <constraint firstItem="EkA-TH-GQI" firstAttribute="leading" secondItem="Ho4-mb-R5N" secondAttribute="leading" id="PJL-vU-UYN"/>
                         <constraint firstItem="Ymy-vG-Thx" firstAttribute="top" secondItem="aw1-bc-J1D" secondAttribute="bottom" constant="23" id="QdV-FO-Bdq"/>
                         <constraint firstAttribute="trailing" secondItem="Ho4-mb-R5N" secondAttribute="trailing" id="SLW-ax-Yf7"/>
@@ -306,7 +308,6 @@
                         <constraint firstItem="ohx-er-sWI" firstAttribute="top" secondItem="a0O-bZ-v04" secondAttribute="top" id="cuP-yg-JlQ"/>
                         <constraint firstAttribute="trailing" secondItem="aw1-bc-J1D" secondAttribute="trailing" constant="19" id="gwh-W5-xtq"/>
                         <constraint firstItem="Ho4-mb-R5N" firstAttribute="top" secondItem="ohx-er-sWI" secondAttribute="bottom" constant="10" id="huW-dE-tTO"/>
-                        <constraint firstAttribute="bottom" secondItem="ohx-er-sWI" secondAttribute="bottom" constant="219" id="r4N-dH-kpZ"/>
                         <constraint firstItem="ohx-er-sWI" firstAttribute="leading" secondItem="a0O-bZ-v04" secondAttribute="leading" id="rfo-w2-pU3"/>
                         <constraint firstItem="EkA-TH-GQI" firstAttribute="trailing" secondItem="Ho4-mb-R5N" secondAttribute="trailing" id="yM0-FM-P8W"/>
                         <constraint firstItem="ohx-er-sWI" firstAttribute="centerX" secondItem="a0O-bZ-v04" secondAttribute="centerX" id="yUh-3d-gZ3"/>
@@ -326,8 +327,8 @@
     <resources>
         <image name="call" width="45" height="44"/>
         <image name="email" width="45" height="44"/>
-        <image name="favourite" width="44" height="44"/>
         <image name="message" width="44" height="44"/>
         <image name="placeHolder" width="126" height="126"/>
+        <image name="unfavourite" width="44" height="44"/>
     </resources>
 </document>

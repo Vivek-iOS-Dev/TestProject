@@ -15,6 +15,7 @@ class ContactDetailVC: UIViewController {
     /// 11 - Container view
 
     @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var favImageView: UIImageView!
     @IBOutlet weak var contactNameLabel: UILabel!
     @IBOutlet weak var mobileLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
@@ -43,12 +44,15 @@ class ContactDetailVC: UIViewController {
         navigationItem.rightBarButtonItem  = rightBarButton
         navigationController?.navigationBar.tintColor = UIColor.appLightGreenColor()
         navigationController?.navigationBar.barTintColor = UIColor.white
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().isTranslucent = false
     }
 
     func applyYGradientColorForContainerView() {
         let cView = view.viewWithTag(11)
         let colorTop = UIColor.white.cgColor
-        let colorBottom = UIColor.appLightGreenColor().cgColor
+        let colorBottom = UIColor.appLightGreenColor().withAlphaComponent(0.5).cgColor
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = [colorTop, colorBottom]
         gradient.locations = [0.0, 1.0]
@@ -77,6 +81,11 @@ class ContactDetailVC: UIViewController {
             profileImageView.image = UIImage.imageFromURL(info.profilePic)
             mobileLabel.text = info.mobile
             emailLabel.text = info.email
+            if info.favorite {
+                favImageView.image = UIImage.enableFavIconImage()
+            } else {
+                favImageView.image = UIImage.disableFavIconImage()
+            }
         }
     }
 
