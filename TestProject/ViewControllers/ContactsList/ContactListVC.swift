@@ -58,7 +58,12 @@ class ContactListVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
 
     func addContactButtonClicked() {
-
+        let addContactsVC = UpdateContactVC()
+        addContactsVC.contacCreationHandler = { response in
+            self.contactsList.append(response)
+            self.contactsListTableView.reloadData()
+        }
+        navigationController?.pushViewController(addContactsVC, animated: true)
     }
 
     // MARK: Other Functionality Methods
@@ -72,6 +77,7 @@ class ContactListVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     // MARK: UITableView Setup Methods
 
     func setupTableView() {
+        contactsListTableView.tableFooterView = UIView()
         contactsListTableView.register(UINib(nibName: cellIdentifier, bundle: nil), forCellReuseIdentifier: cellIdentifier)
     }
 

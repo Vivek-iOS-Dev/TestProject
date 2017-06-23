@@ -24,6 +24,8 @@
 		E2B2BC841EFD2AF100B738D9 /* ContactObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B2BC831EFD2AF100B738D9 /* ContactObject.swift */; };
 		E2B2BC891EFD410D00B738D9 /* ContactDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B2BC871EFD410D00B738D9 /* ContactDetailVC.swift */; };
 		E2B2BC8A1EFD410D00B738D9 /* ContactDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2B2BC881EFD410D00B738D9 /* ContactDetailVC.xib */; };
+		E2B2BC901EFD571200B738D9 /* UpdateContactVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B2BC8E1EFD571200B738D9 /* UpdateContactVC.swift */; };
+		E2B2BC911EFD571200B738D9 /* UpdateContactVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2B2BC8F1EFD571200B738D9 /* UpdateContactVC.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		E2B2BC831EFD2AF100B738D9 /* ContactObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactObject.swift; path = Model/ContactObject.swift; sourceTree = "<group>"; };
 		E2B2BC871EFD410D00B738D9 /* ContactDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContactDetailVC.swift; path = ViewControllers/ContactDetail/ContactDetailVC.swift; sourceTree = "<group>"; };
 		E2B2BC881EFD410D00B738D9 /* ContactDetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactDetailVC.xib; path = ViewControllers/ContactDetail/ContactDetailVC.xib; sourceTree = "<group>"; };
+		E2B2BC8E1EFD571200B738D9 /* UpdateContactVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UpdateContactVC.swift; path = ViewControllers/UpdateContact/UpdateContactVC.swift; sourceTree = "<group>"; };
+		E2B2BC8F1EFD571200B738D9 /* UpdateContactVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UpdateContactVC.xib; path = ViewControllers/UpdateContact/UpdateContactVC.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,7 @@
 		E2B2BC681EFD111400B738D9 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E2B2BC8B1EFD56D400B738D9 /* Update Contacts */,
 				E2B2BC851EFD40C700B738D9 /* Contact Detail */,
 				E2B2BC6A1EFD114400B738D9 /* Contacts List */,
 			);
@@ -231,6 +236,23 @@
 			children = (
 				E2B2BC871EFD410D00B738D9 /* ContactDetailVC.swift */,
 				E2B2BC881EFD410D00B738D9 /* ContactDetailVC.xib */,
+			);
+			name = "View Controller";
+			sourceTree = "<group>";
+		};
+		E2B2BC8B1EFD56D400B738D9 /* Update Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				E2B2BC8D1EFD56ED00B738D9 /* View Controller */,
+			);
+			name = "Update Contacts";
+			sourceTree = "<group>";
+		};
+		E2B2BC8D1EFD56ED00B738D9 /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				E2B2BC8E1EFD571200B738D9 /* UpdateContactVC.swift */,
+				E2B2BC8F1EFD571200B738D9 /* UpdateContactVC.xib */,
 			);
 			name = "View Controller";
 			sourceTree = "<group>";
@@ -344,6 +366,7 @@
 			files = (
 				E2B2BC8A1EFD410D00B738D9 /* ContactDetailVC.xib in Resources */,
 				E2B2BC401EFCE80600B738D9 /* LaunchScreen.storyboard in Resources */,
+				E2B2BC911EFD571200B738D9 /* UpdateContactVC.xib in Resources */,
 				E2B2BC3D1EFCE80600B738D9 /* Assets.xcassets in Resources */,
 				E2B2BC711EFD11BA00B738D9 /* ContactListVC.xib in Resources */,
 				E2B2BC741EFD137100B738D9 /* Main.storyboard in Resources */,
@@ -380,6 +403,7 @@
 				E2B2BC7D1EFD193100B738D9 /* ContactsListTableCell.swift in Sources */,
 				E2B2BC7A1EFD162100B738D9 /* UIColor.swift in Sources */,
 				E2B2BC821EFD1D7200B738D9 /* APIManager.swift in Sources */,
+				E2B2BC901EFD571200B738D9 /* UpdateContactVC.swift in Sources */,
 				E2B2BC891EFD410D00B738D9 /* ContactDetailVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

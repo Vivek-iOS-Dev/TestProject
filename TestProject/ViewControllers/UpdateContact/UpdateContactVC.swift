@@ -1,5 +1,5 @@
 //
-//  ContactDetailVC.swift
+//  UpdateContactVC.swift
 //  TestProject
 //
 //  Created by Vivek Karuppanaraj on 23/06/17.
@@ -8,39 +8,37 @@
 
 import UIKit
 
-class ContactDetailVC: UIViewController {
+class UpdateContactVC: UIViewController {
 
     /// Tag view information
 
     /// 11 - Container view
 
     @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var favImageView: UIImageView!
-    @IBOutlet weak var contactNameLabel: UILabel!
-    @IBOutlet weak var mobileLabel: UILabel!
-    @IBOutlet weak var emailLabel: UILabel!
-    var contactId = 0
+    @IBOutlet weak var firstNameField: UITextField!
+    @IBOutlet weak var lastNameField: UITextField!
+    @IBOutlet weak var mobileField: UITextField!
+    @IBOutlet weak var emailField: UITextField!
     var activityIndicator = UIActivityIndicatorView()
-    var currentContactInfo: ContactObject?
+    var contacCreationHandler: ((ContactObject) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         doNavBarDesigns()
         applyYGradientColorForContainerView()
         setUpActivityIndicator()
-        getContactsListDetailFromServer()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
+
     // MARK: UI Design Methods
 
     func doNavBarDesigns() {
-        self.navigationController?.navigationBar.backItem?.title = "Contacts"
-
-        let rightBarButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.plain, target: self, action: #selector(editButtonClicked))
+        self.navigationController?.navigationBar.backItem?.title = "Cancel"
+        let rightBarButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.plain, target: self, action: #selector(doneButtonClicked))
         navigationItem.rightBarButtonItem  = rightBarButton
         navigationController?.navigationBar.tintColor = UIColor.appLightGreenColor()
         navigationController?.navigationBar.barTintColor = UIColor.white
@@ -69,39 +67,44 @@ class ContactDetailVC: UIViewController {
 
     // MARK: UI User Interaction Methods
 
-    func editButtonClicked() {
-
-    }
-
-    // MARK: Other Functionality methods
-
-    func updateCurrentContactInfo() {
-        if let info = currentContactInfo {
-            contactNameLabel.text = "\(info.firstName) \(info.lastName)"
-            profileImageView.image = UIImage.imageFromURL(info.profilePic)
-            mobileLabel.text = info.mobile
-            emailLabel.text = info.email
-            if info.favorite {
-                favImageView.image = UIImage.enableFavIconImage()
-            } else {
-                favImageView.image = UIImage.disableFavIconImage()
-            }
+    func doneButtonClicked() {
+        guard (firstNameField.text?.characters.count)! > 0 else {
+            showAlertViewController("First name field is mandatory !")
+            return
         }
+
+        guard (mobileField.text?.characters.count)! > 0 else {
+            showAlertViewController("Mobile field is mandatory !")
+            return
+        }
+
+        createContactAPICall()
     }
 
-    // MARK: API Calls
+    // MARK: Other Functionality Methods
 
-    func getContactsListDetailFromServer() {
+    func prepareCreateContactObject() -> [String: Any] {
+        var contactInfo: [String: Any] = [:]
+            contactInfo["first_name"] = firstNameField.text
+            contactInfo["last_name"] = lastNameField.text
+            contactInfo["email"] = emailField.text
+            contactInfo["phone_number"] = mobileField.text
+            contactInfo["profile_pic"] = ""
+        return contactInfo
+    }
+
+
+    func createContactAPICall() {
         activityIndicator.startAnimating()
-        APIManager.getContactDetail(contactId) {
+        APIManager.createContactDetail(prepareCreateContactObject()) {
             response, error in
             self.activityIndicator.stopAnimating()
             if error == nil {
                 if let info = response {
-                    self.currentContactInfo = info
-                    self.updateCurrentContactInfo()
-                } else {
-                    self.showAlertViewController("Invalid Response !")
+                    if self.contacCreationHandler != nil {
+                        self.contacCreationHandler!(info)
+                    }
+                    _ = self.navigationController?.popViewController(animated: true)
                 }
             } else {
                 self.showAlertViewController("Request failed !")
@@ -119,4 +122,5 @@ class ContactDetailVC: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+
 }

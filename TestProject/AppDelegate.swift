@@ -43,7 +43,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: Other Functionality Methods
 
+    func doAppDesigns() {
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().isTranslucent = false
+    }
+    // MARK: Other Functionality Methods
+
     func setContactsListViewAsRootVC() {
+        doAppDesigns()
         let contactsListVC = ContactListVC()
         let navigationController = UINavigationController.init(rootViewController: contactsListVC)
         window?.rootViewController = navigationController
