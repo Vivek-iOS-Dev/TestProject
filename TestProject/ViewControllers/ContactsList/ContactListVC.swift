@@ -13,7 +13,7 @@ class ContactListVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     /// Class Constants
 
     let cellIdentifier = "ContactsListTableCell"
-    let cellHeight:CGFloat = 60
+    let cellHeight: CGFloat = 60
     var contactsList: [ContactObject] = []
     var activityIndicator = UIActivityIndicatorView()
 
@@ -110,9 +110,11 @@ class ContactListVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
 
     func getContactsListFromServer() {
         activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         APIManager.getListOfContacts() {
             response, error in
             self.activityIndicator.stopAnimating()
+            UIApplication.shared.endIgnoringInteractionEvents()
             if error == nil {
                 if let info = response {
                     self.contactsList = info

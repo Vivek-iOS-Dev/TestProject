@@ -203,9 +203,11 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
 
     func createContactAPICall() {
         activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         APIManager.createContactDetail(prepareCreateContactObject(), nil) {
             response, error in
             self.activityIndicator.stopAnimating()
+            UIApplication.shared.endIgnoringInteractionEvents()
             if error == nil {
                 if let info = response {
                     if self.contactCreationHandler != nil {
@@ -222,9 +224,11 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
     func updateContactAPICall() {
         if checkWhetherTheContactUpdated() {
             activityIndicator.startAnimating()
+            UIApplication.shared.beginIgnoringInteractionEvents()
             APIManager.createContactDetail(prepareCreateContactObject(), currentObject?.id) {
                 response, error in
                 self.activityIndicator.stopAnimating()
+                UIApplication.shared.endIgnoringInteractionEvents()
                 if error == nil {
                     if let info = response {
                         if self.contactUpdationHandler != nil {

@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MessageUI
 
-class ContactDetailVC: UIViewController {
+class ContactDetailVC: UIViewController, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
 
     /// Tag view information
 
@@ -40,7 +41,6 @@ class ContactDetailVC: UIViewController {
 
     func doNavBarDesigns() {
         self.navigationController?.navigationBar.backItem?.title = "Contacts"
-
         let rightBarButton = UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.plain, target: self, action: #selector(editButtonClicked))
         navigationItem.rightBarButtonItem  = rightBarButton
         navigationController?.navigationBar.tintColor = UIColor.appLightGreenColor()
@@ -79,9 +79,28 @@ class ContactDetailVC: UIViewController {
             if self.contactUpdationHandler != nil {
                 self.contactUpdationHandler!(response)
             }
-
         }
         navigationController?.pushViewController(addContactsVC, animated: true)
+    }
+
+    @IBAction func sendEmailButtonTapped(sender: AnyObject) {
+        if let mailComposeViewController = configuredMailComposeViewController() {
+        if MFMailComposeViewController.canSendMail() {
+            self.present(mailComposeViewController, animated: true, completion: nil)
+        } else {
+            showAlertViewController("Can't send Mail !")
+        }
+        } else {
+            showAlertViewController("Can't send Mail !")
+        }
+    }
+
+    @IBAction func sendMessageButtonTapped(sender: AnyObject) {
+        makeTextMessage()
+    }
+
+    @IBAction func callButtonTapped(sender: AnyObject) {
+        makePhoneCall()
     }
 
     // MARK: Other Functionality methods
@@ -100,13 +119,61 @@ class ContactDetailVC: UIViewController {
         }
     }
 
+    func makePhoneCall() {
+        if let phoneNumber = currentContactInfo?.mobile {
+            if let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) {
+                if #available(iOS 10, *) {
+                    UIApplication.shared.open(url)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+            } else {
+                showAlertViewController("Can't make phone call !")
+            }
+        } else {
+                showAlertViewController("Phone number not available !")
+            }
+        }
+
+    func makeTextMessage() {
+        if let phoneNumber = currentContactInfo?.mobile {
+        if (MFMessageComposeViewController.canSendText()) {
+            let controller = MFMessageComposeViewController()
+            controller.body = "Message Body"
+            controller.recipients = [phoneNumber]
+            controller.messageComposeDelegate = self
+            self.present(controller, animated: true, completion: nil)
+        } else {
+            showAlertViewController("Can't send message !")
+        }
+        } else {
+            showAlertViewController("Phone number not available !")
+        }
+    }
+
+    func configuredMailComposeViewController() -> MFMailComposeViewController? {
+        if let emailId = currentContactInfo?.email {
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self
+        mailComposerVC.setToRecipients([emailId])
+        mailComposerVC.setSubject("E-mail...")
+        mailComposerVC.setMessageBody("Hiiii", isHTML: false)
+        return mailComposerVC
+        } else {
+            showAlertViewController("Email not available !")
+            return nil
+        }
+    }
+
     // MARK: API Calls
 
     func getContactsListDetailFromServer() {
         activityIndicator.startAnimating()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         APIManager.getContactDetail(contactId) {
             response, error in
             self.activityIndicator.stopAnimating()
+            UIApplication.shared.endIgnoringInteractionEvents()
             if error == nil {
                 if let info = response {
                     self.currentContactInfo = info
@@ -130,4 +197,23 @@ class ContactDetailVC: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+
+    // MARK: Message Composer Delegate methods
+
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        if result == .cancelled || result == .failed {
+            showAlertViewController("Can't send Message !")
+        }
+        controller.dismiss(animated: true, completion: nil)
+    }
+
+    // MARK: MFMailComposeViewControllerDelegate
+
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if result == .cancelled || result == .failed {
+            showAlertViewController("Can't send Mail !")
+        }
+        controller.dismiss(animated: true, completion: nil)
+    }
+
 }
