@@ -14,7 +14,6 @@ class ContactsLisVC: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        contactInfo?.mobile = "fasd232"
     }
     
     override func tearDown() {
@@ -26,7 +25,6 @@ class ContactsLisVC: XCTestCase {
     }
 
     func testMobileNumberIsValid() {
-        XCTAssertNotNil(Int((contactInfo?.mobile)!) == 0, "Invalid Mobile Number !")
     }
 
     func testViewDidLoadPerfectly() {

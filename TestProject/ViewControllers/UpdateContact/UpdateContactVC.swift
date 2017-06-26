@@ -213,7 +213,7 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
                     if self.contactCreationHandler != nil {
                         self.contactCreationHandler!(info)
                     }
-                    _ = self.navigationController?.popViewController(animated: true)
+                    self.showStatusMessage("Contact added successfully !")
                 }
             } else {
                 self.showAlertViewController("Request failed !")
@@ -234,7 +234,7 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
                         if self.contactUpdationHandler != nil {
                             self.contactUpdationHandler!(info)
                         }
-                        _ = self.navigationController?.popViewController(animated: true)
+                        self.showStatusMessage("Contact updated successfully !")
                     }
                 } else {
                     self.showAlertViewController("Request failed !")
@@ -251,6 +251,14 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
         }
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    func showStatusMessage(_ message: String) {
+        let alert = UIAlertController(title: message, message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { _ in
+            _ = self.navigationController?.popViewController(animated: true)
+        }))
         self.present(alert, animated: true, completion: nil)
     }
 
