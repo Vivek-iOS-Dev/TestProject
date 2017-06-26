@@ -22,6 +22,7 @@ class ContactDetailVC: UIViewController {
     var contactId = 0
     var activityIndicator = UIActivityIndicatorView()
     var currentContactInfo: ContactObject?
+    var contactUpdationHandler: ((ContactObject) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +71,17 @@ class ContactDetailVC: UIViewController {
     // MARK: UI User Interaction Methods
 
     func editButtonClicked() {
+        let addContactsVC = UpdateContactVC()
+        addContactsVC.currentObject = currentContactInfo
+        addContactsVC.contactUpdationHandler = { response in
+                self.currentContactInfo = response
+                self.updateCurrentContactInfo()
+            if self.contactUpdationHandler != nil {
+                self.contactUpdationHandler!(response)
+            }
 
+        }
+        navigationController?.pushViewController(addContactsVC, animated: true)
     }
 
     // MARK: Other Functionality methods

@@ -65,8 +65,8 @@ class APIManager: NSObject {
             }.resume()
     }
 
-    static func createContactDetail(_ contactInfo: [String: Any], completionHandler:@escaping (ContactObject?, String?) -> Void) {
-        URLSession.shared.dataTask(with: prepareRequestForCreateContactDetail(contactInfo)) { data, response, error in
+    static func createContactDetail(_ contactInfo: [String: Any],_ updateContactId: Int?, completionHandler:@escaping (ContactObject?, String?) -> Void) {
+        URLSession.shared.dataTask(with: prepareRequestForCreateContactDetail(contactInfo, updateContactId)) { data, response, error in
             guard error == nil else {
                 completionHandler(nil, error?.localizedDescription)
                 return
@@ -78,9 +78,8 @@ class APIManager: NSObject {
             }
 
             if let httpResponse = response as? HTTPURLResponse {
-                print("Status Code : \(httpResponse.statusCode)")
                 guard httpResponse.statusCode >= 200 else {
-                    completionHandler(nil, "Invalid Request")
+                completionHandler(nil, "Invalid Request")
                     return
                 }
             }
@@ -112,16 +111,15 @@ class APIManager: NSObject {
         return request
     }
 
-    static func prepareRequestForCreateContactDetail(_ contactInfo: [String: Any]) -> URLRequest {
+    static func prepareRequestForCreateContactDetail(_ contactInfo: [String: Any],_ updateContactId: Int?) -> URLRequest {
         print(contactInfo)
-        var request = URLRequest(url: URL(string: "\(appBaseURL)contacts.json")!)
+        var request = URLRequest(url: updateContactId == nil ? URL(string: "\(appBaseURL)contacts.json")! : URL(string: "\(appBaseURL)contacts/\(updateContactId!).json")!)
         request.addValue("application/json",forHTTPHeaderField: "Content-Type")
         request.addValue("application/json",forHTTPHeaderField: "Accept")
         let jsonData = try? JSONSerialization.data(withJSONObject: contactInfo)
         request.httpBody = jsonData
-        request.httpMethod = "POST"
+        request.httpMethod = updateContactId == nil ? "POST" : "PUT"
         return request
     }
 
-   
 }

@@ -59,7 +59,7 @@ class ContactListVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
 
     func addContactButtonClicked() {
         let addContactsVC = UpdateContactVC()
-        addContactsVC.contacCreationHandler = { response in
+        addContactsVC.contactCreationHandler = { response in
             self.contactsList.append(response)
             self.contactsListTableView.reloadData()
         }
@@ -70,6 +70,10 @@ class ContactListVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
 
     func navigateToDetailVC(_ index: Int) {
         let detailVC = ContactDetailVC()
+        detailVC.contactUpdationHandler = { resposne in
+            self.contactsList[index] = resposne
+            self.contactsListTableView.reloadData()
+        }
         detailVC.contactId = contactsList[index].id
         navigationController?.pushViewController(detailVC, animated: true)
     }

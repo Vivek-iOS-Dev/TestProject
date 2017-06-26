@@ -20,8 +20,10 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
     @IBOutlet weak var mobileField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     var activityIndicator = UIActivityIndicatorView()
-    var contacCreationHandler: ((ContactObject) -> Void)?
+    var contactCreationHandler: ((ContactObject) -> Void)?
+    var contactUpdationHandler: ((ContactObject) -> Void)?
     var picker: UIImagePickerController? = UIImagePickerController()
+    var currentObject: ContactObject?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +31,9 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
         applyYGradientColorForContainerView()
         setUpActivityIndicator()
         picker?.delegate=self
+        if currentObject != nil {
+            populateValuesFromCurrentObject()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,6 +72,15 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
         view.addSubview(activityIndicator)
     }
 
+    func populateValuesFromCurrentObject() {
+        if let info = currentObject {
+            firstNameField.text = info.firstName
+            lastNameField.text = info.lastName
+            mobileField.text = info.mobile
+            emailField.text = info.email
+        }
+    }
+
     // MARK: UI User Interaction Methods
 
     func doneButtonClicked() {
@@ -95,7 +109,11 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
             return
         }
 
-        createContactAPICall()
+        if currentObject == nil {
+            createContactAPICall()
+        } else {
+            updateContactAPICall()
+        }
     }
 
     @IBAction func uploadImageButtonClicked(sender: UIButton) {
@@ -131,6 +149,15 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
             contactInfo["email"] = emailField.text
             contactInfo["phone_number"] = mobileField.text
         return contactInfo
+    }
+
+    func checkWhetherTheContactUpdated() -> Bool {
+        if let info = currentObject {
+            if info.firstName != firstNameField.text || info.lastName != lastNameField.text || info.email != emailField.text || info.mobile != mobileField.text {
+                return true
+            }
+        }
+        return false
     }
 
     func openGallary() {
@@ -169,24 +196,45 @@ class UpdateContactVC: UIViewController, UIImagePickerControllerDelegate,UIPopov
         let charcterSet  = NSCharacterSet(charactersIn: "+0123456789").inverted
         let inputString = mobileField.text?.components(separatedBy: charcterSet)
         let filtered = inputString?.joined(separator: "")
-        return  mobileField.text == filtered && mobileField.text?.characters.count == 10
+        return  mobileField.text == filtered && mobileField.text?.characters.count ?? 0 >= 10
     }
 
+    // MARK: API Methods
 
     func createContactAPICall() {
         activityIndicator.startAnimating()
-        APIManager.createContactDetail(prepareCreateContactObject()) {
+        APIManager.createContactDetail(prepareCreateContactObject(), nil) {
             response, error in
             self.activityIndicator.stopAnimating()
             if error == nil {
                 if let info = response {
-                    if self.contacCreationHandler != nil {
-                        self.contacCreationHandler!(info)
+                    if self.contactCreationHandler != nil {
+                        self.contactCreationHandler!(info)
                     }
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             } else {
                 self.showAlertViewController("Request failed !")
+            }
+        }
+    }
+
+    func updateContactAPICall() {
+        if checkWhetherTheContactUpdated() {
+            activityIndicator.startAnimating()
+            APIManager.createContactDetail(prepareCreateContactObject(), currentObject?.id) {
+                response, error in
+                self.activityIndicator.stopAnimating()
+                if error == nil {
+                    if let info = response {
+                        if self.contactUpdationHandler != nil {
+                            self.contactUpdationHandler!(info)
+                        }
+                        _ = self.navigationController?.popViewController(animated: true)
+                    }
+                } else {
+                    self.showAlertViewController("Request failed !")
+                }
             }
         }
     }

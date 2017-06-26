@@ -15,6 +15,7 @@
                 <outlet property="firstNameField" destination="YGg-cL-ca4" id="l6a-eb-r87"/>
                 <outlet property="lastNameField" destination="w6T-jI-3ic" id="MDv-jp-0K9"/>
                 <outlet property="mobileField" destination="A2B-7d-Kt1" id="nsA-1n-e12"/>
+                <outlet property="profileImageView" destination="bUy-zC-Hdg" id="Xyc-xR-XWd"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
